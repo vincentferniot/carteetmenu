@@ -1,0 +1,33 @@
+<div class="container">
+    <div class="menus-button-container clearfix">
+        <a ui-sref="menus" class="btn btn-lg btn-primary"><i class="glyphicon glyphicon-arrow-left"></i> Back to menus list</a>
+    </div>
+
+    <h1>{{menu.title}}</h1>
+    <div class="row">
+        <div class="col-sm-4">
+            <h2 class="text-center">Meals</h2>
+            <ul class="list-unstyled sortable meals-container"
+                ui-sortable="menu.sortableOptions"
+                ng-model="menu.availableMeals">
+
+                <li class="meals" ng-repeat="meal in menu.availableMeals">
+                    <div style="background-size:cover; background-image:url({{meal.instance.picture[0].file}});" class="img-responsive img-circle picture"></div>
+                    {{ meal.instance.title }}
+                </li>
+            </ul>
+        </div>
+        <div class="col-sm-8">
+            <h2 class="text-center">Menu</h2>
+
+            <ul class="list-unstyled sortable menu-container"
+                ui-sortable="menu.sortableOptions"
+                ng-model="menu.insertedMeals">
+                <li class="meals"ng-show="menu.insertedMeals.length != undefined" ng-repeat="meal in menu.insertedMeals">
+                    <div style="background-size:cover; background-image:url({{meal.instance.picture[0].file}});" class="img-responsive img-circle picture"></div>
+                    {{ meal.instance.title }}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+<div class="container">
+    <div class="row">
+
+        <!-- SIGNUP =============================== -->
+        <div class="col-sm-6">
+            <div class="page-header text-center">
+                <h2>Sign Up</h2>
+            </div>
+
+            <!-- signup button to use facebook -->
+            <p>
+                <a class="btn btn-block btn-primary" href="https://carteetmenu.stamplayapp.com/auth/v1/facebook/connect" target="_blank">Sign Up with Facebook</a>
+            </p>
+
+            <!-- form will use authentication.signup on submit -->
+            <form ng-submit="authentication.signup.func()" novalidate>
+                <formly-form model="authentication.signup.model" fields="authentication.signup.fields" form="authentication.signup.form">
+                    <button type="submit" class="btn btn-primary" ng-disabled="authentication.signup.form.$invalid">
+                        Submit
+                    </button>
+                </formly-form>
+            </form>
+        </div>
+
+        <!-- LOGIN ================================ -->
+        <div class="col-sm-6">
+            <div class="page-header text-center">
+                <h2>Login</h2>
+            </div>
+
+            <!-- signup button to use facebook -->
+            <p>
+                <a class="btn btn-block btn-primary" href="https://carteetmenu.stamplayapp.com/auth/v1/facebook/connect" target="_blank">Login with Facebook</a>
+            </p>
+
+            <form ng-submit="authentication.login.func()" novalidate>
+                <formly-form model="authentication.login.model" fields="authentication.login.fields" form="authentication.login.form">
+                    <button type="submit" class="btn btn-primary" ng-disabled="authentication.login.form.$invalid">
+                        Login
+                    </button>
+                </formly-form>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+<div class="container">
+    <div class="row">
+
+        <!-- SIGNUP =============================== -->
+        <div class="col-sm-6 col-md-offset-3">
+            <div class="page-header text-center">
+                <img ng-if="!currentUser.profileImg" src="http://placebear.com/g/100/100" alt="{{currentUser.name}}" class="center-block img-circle img-responsive"/>
+                <img ng-if="currentUser.profileImg" ng-src="{{currentUser.profileImg}}" alt="{{currentUser.name}}" class="img-circle img-responsive"/>
+                <h2>Edit your profile</h2>
+            </div>
+
+            <form ng-submit="profile.email.update()" novalidate>
+                <formly-form model="profile.email.model" fields="profile.email.fields" form="profile.email.form">
+                    <button type="submit" class="btn btn-primary" ng-disabled="profile.email.form.$invalid">
+                        Update
+                    </button>
+                </formly-form>
+            </form>
+            <br/>
+            <form ng-submit="profile.name.update()" novalidate>
+                <formly-form model="profile.name.model" fields="profile.name.fields" form="profile.name.form">
+                    <button type="submit" class="btn btn-primary" ng-disabled="profile.name.form.$invalid">
+                        Update
+                    </button>
+                </formly-form>
+            </form>
+            <br/>
+            <form ng-submit="profile.password.update()" novalidate>
+                <formly-form model="profile.password.model" fields="profile.password.fields" form="profile.password.form">
+                    <button type="submit" class="btn btn-primary" ng-disabled="profile.password.form.$invalid">
+                        Update
+                    </button>
+                </formly-form>
+            </form>
+        </div>
+
+    </div>
+</div>
