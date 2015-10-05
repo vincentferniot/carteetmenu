@@ -3,10 +3,9 @@
         <a ui-sref="menus" class="btn btn-lg btn-primary"><i class="glyphicon glyphicon-arrow-left"></i> Back to menus list</a>
     </div>
 
-    <h1>{{menu.title}}</h1>
     <div class="row">
         <div class="col-sm-4">
-            <h2 class="text-center">Meals</h2>
+            <h2 class="text-center h1">Meals</h2>
             <ul class="list-unstyled sortable meals-container"
                 ui-sortable="menu.sortableOptions"
                 ng-model="menu.availableMeals">
@@ -18,16 +17,21 @@
             </ul>
         </div>
         <div class="col-sm-8">
-            <h2 class="text-center">Menu</h2>
-
-            <ul class="list-unstyled sortable menu-container"
-                ui-sortable="menu.sortableOptions"
-                ng-model="menu.insertedMeals">
-                <li class="meals"ng-show="menu.insertedMeals.length != undefined" ng-repeat="meal in menu.insertedMeals">
-                    <div style="background-size:cover; background-image:url({{meal.instance.picture[0].file}});" class="img-responsive img-circle picture"></div>
-                    {{ meal.instance.title }}
-                </li>
-            </ul>
+            <form ng-submit="menu.update()" novalidate>
+                <div class="form-group">
+                    <label for="menu-title">Menu title</label>
+                    <input id="menu-title" class="form-control" type="text" class="h1" ng-model="menu.title" value="{{menu.title}}"/>
+                </div>
+                <ul class="list-unstyled sortable menu-container"
+                    ui-sortable="menu.sortableOptions"
+                    ng-model="menu.insertedMeals">
+                    <li class="meals" ng-repeat="meal in menu.insertedMeals">
+                        <div style="background-size:cover; background-image:url({{meal.instance.picture[0].file}});" class="img-responsive img-circle picture"></div>
+                        {{ meal.instance.title }}
+                    </li>
+                </ul>
+                <button class="btn btn-lg btn-success" type="submit">Save</button>
+            </form>
         </div>
     </div>
 </div>

@@ -14,6 +14,7 @@
       getMenuById: getMenuById,
       getMeals: getMeals,
       create: create,
+      update: update,
       destroy: destroy
     };
 
@@ -122,6 +123,38 @@
         }, function(){
           def.reject({'error': 'Unable to create menu.'});
         });
+
+      return def.promise;
+    }
+    /**
+     * ADD a menu
+     */
+    function update(id, data) {
+      var def = $q.defer();
+
+      // instanticate a new product model from the stamplay js sdk
+      var menu = $stamplay.Cobject('menu').Model;
+
+      menu.fetch(id).then(
+        function(){
+          angular.forEach(data, function(value, key) {
+            menu.set(key, value);
+          });
+          console.log(data);
+
+          menu.save()
+            .then(function() {
+              def.resolve(menu);
+            }, function(){
+              def.reject({'error': 'Unable to update menu.'});
+            });
+        }
+      );
+
+      // loop over the fields in data and update the product
+
+      // save the object
+
 
       return def.promise;
     }
