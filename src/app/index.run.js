@@ -8,11 +8,10 @@
     .run(runBlock);
 
   /** @ngInject */
-  function runBlock($log, $rootScope, User) {
+  function runBlock($log, $rootScope, User, $state) {
 
     $log.debug('runBlock end');
     $rootScope.currentUser = {};
-
 
     User.getCurrent()
       .then(function(data) {
@@ -20,16 +19,12 @@
           $rootScope.currentUser.id    = data.get('_id');
           $rootScope.currentUser.name  = data.get('displayName');
           //$rootScope.currentUser.image = data.get('profileImg');
-
-
-
+          $state.go('admin.menus');
         } else {
           // clear the current user just to be sure
           $rootScope.currentUser = {};
           $state.go('home');
         }
       });
-
   }
-
 })();

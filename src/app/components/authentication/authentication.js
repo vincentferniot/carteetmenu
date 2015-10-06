@@ -97,7 +97,7 @@
             $rootScope.currentUser.image = data.get('profileImg');
 
             // redirect the user
-            $state.go('home');
+            $state.go('admin.menus');
           }
         });
     }
@@ -121,7 +121,7 @@
             $rootScope.currentUser.image = data.get('profileImg');
 
             // redirect the user
-            $state.go('home');
+            $state.go('admin.menus');
           }
         }, function(data){
           toastr.error(data.error + '<br> Check your email and/or your password');

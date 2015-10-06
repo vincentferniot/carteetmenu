@@ -6,13 +6,13 @@
             </a>
         </div>
         <ul class="nav navbar-nav">
-            <li ng-class="{ active: header.isActive('/')}"><a ui-sref="home">Home <span class="sr-only">(current)</span></a></li>
+            <li ng-show="!currentUser.id" ng-class="{ active: header.isActive('/')}"><a ui-sref="home">Home <span class="sr-only">(current)</span></a></li>
             <li ng-show="!currentUser.id" ng-class="{ active: header.isActive('/authentication')}"><a ui-sref="authentication">Authenticate</a></li>
-            <li ng-show="currentUser.id" ng-class="{ active: header.isActive('/meals')}"><a ui-sref="meals">Meals</a></li>
-            <li ng-show="currentUser.id" ng-class="{ active: header.isActive('/menus')}"><a ui-sref="menus">Menus</a></li>
-            <li ng-show="currentUser.id" ng-class="{ active: header.isActive('/profile')}"><a ui-sref="profile">Profile</a></li>
+            <li ng-show="currentUser.id" ng-class="{ active: header.isActive('/admin/menus')}"><a ui-sref="admin.menus">Menus</a></li>
+            <li ng-show="currentUser.id" ng-class="{ active: header.isActive('/admin/meals')}"><a ui-sref="admin.meals">Meals</a></li>
+            <li ng-show="currentUser.id" ng-class="{ active: header.isActive('/admin/profile')}"><a ui-sref="admin.profile">Profile</a></li>
         </ul>
-        <ul class="nav navbar-nav navbar-right" ng-show="currentUser.id">
+        <ul class="nav navbar-nav navbar-right" ng-if="currentUser.id">
             <li>
                 <img ng-if="!currentUser.profileImg" src="http://placebear.com/g/40/40" alt="{{currentUser.name}}" class="img-circle img-responsive pull-left"/>
                 <img ng-if="currentUser.profileImg" src="{{currentUser.profileImg}}" alt="{{currentUser.name}}" class="img-circle"/>

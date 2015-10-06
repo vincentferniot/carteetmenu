@@ -39,13 +39,26 @@
             templateUrl: 'app/partials/header.html' }
         }
       })
-      .state('profile', {
+      .state('admin', {
+        abstract: true,
+        url: '/admin',
+        views: {
+          '': {
+            templateUrl: "app/components/admin/admin.html"
+          },
+          'header': {
+            controller: 'HeaderController',
+            controllerAs: 'header',
+            templateUrl: 'app/partials/header.html' }
+        }
+      })
+      .state('admin.profile', {
         url: '/profile',
         views: {
           '': {
-            controller: 'ProfileController',
+            controller: 'AdminProfileController',
             controllerAs: 'profile',
-            templateUrl: "app/components/profile/profile.html"
+            templateUrl: "app/components/admin/profile/profile.html"
           },
           'header': {
             controller: 'HeaderController',
@@ -53,13 +66,13 @@
             templateUrl: 'app/partials/header.html' }
         }
       })
-      .state('menus', {
+      .state('admin.menus', {
         url: '/menus',
         views: {
           '': {
-            controller: 'MenusController',
+            controller: 'AdminMenusController',
             controllerAs: 'menus',
-            templateUrl: "app/components/menus/menus.html"
+            templateUrl: "app/components/admin/menus/menus.html"
           },
           'header': {
             controller: 'HeaderController',
@@ -67,13 +80,13 @@
             templateUrl: 'app/partials/header.html' }
         }
       })
-      .state('menu', {
+      .state('admin.menu', {
         url: '/menu/{id}',
         views: {
           '': {
-            controller: 'MenuController',
+            controller: 'AdminMenuController',
             controllerAs: 'menu',
-            templateUrl: "app/components/menu/menu.html"
+            templateUrl: "app/components/admin/menu/menu.html"
           },
           'header': {
             controller: 'HeaderController',
@@ -81,13 +94,13 @@
             templateUrl: 'app/partials/header.html' }
         }
       })
-      .state('meals', {
+      .state('admin.meals', {
         url: '/meals',
         views: {
           '': {
-            controller: 'MealsController',
+            controller: 'AdminMealsController',
             controllerAs: 'meals',
-            templateUrl: "app/components/meals/meals.html"
+            templateUrl: "app/components/admin/meals/meals.html"
           },
           'header': {
             controller: 'HeaderController',
