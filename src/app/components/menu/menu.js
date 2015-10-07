@@ -9,70 +9,28 @@
   function MenuController(Meals, Menus, $stateParams) {
     var menu = this;
 
-    menu.availableMeals = [];
-    menu.insertedMeals = [];
+    menu.meals = [];
     menu.title = '';
-    menu.update = update;
 
-    Meals.all().then(
-      function(mealCollection){
 
-        Menus.getMenuById($stateParams.id).then(
+    Menus.getMenuById($stateParams.id).then(
 
-          function(menuModel){
+      function(menuModel){
 
-            var mealsId = menuModel.get('meals');
-            menu.title = menuModel.get('title');
+        var mealsId = menuModel.get('meals');
+        menu.title = menuModel.get('title');
 
-            console.log(_.isUndefined(mealsId));
-            console.log(_.isArray(mealsId));
-
-            if (_.isArray(mealsId) && !_.isUndefined(mealsId)){
-              Menus.getMeals({'menuId': $stateParams.id, 'mealsId': mealsId}).then(
-                function(meals){
-                  menu.insertedMeals = meals;
-                }
-              );
+        if (_.isArray(mealsId) && !_.isUndefined(mealsId)){
+          Menus.getMeals({'menuId': $stateParams.id, 'mealsId': mealsId}).then(
+            function(meals){
+              menu.meals = meals;
             }
-
-            mealCollection.remove(mealsId);
-            menu.availableMeals = mealCollection.instance;
-
-          });
-    });
-
-
-    /** ui-sortable options **/
-    menu.sortableOptions = {
-      placeholder: 'meals',
-      connectWith: '.sortable',
-      cursor: 'move',
-      opacity: 0.5
-      //stop: function(e, ui){
-      //  console.log(menu.insertedMeals);
-      //  //console.log(ui.item.sortable.sourceModel[0].instance._id);
-      //}
-    };
-
-    function update(){
-      var data = {};
-      var mealsID = [];
-
-      angular.forEach(menu.insertedMeals, function(meal){
-        mealsID.push(meal.get('id'));
-      });
-      console.log(mealsID);
-
-      data.meals = mealsID;
-      data.title = menu.title;
-
-      Menus.update($stateParams.id, data).then(
-        function(){
-          toastr.success('Your menu has been updated successfully', 'Menu update');
+          );
         }
-      );
 
-    }
+      });
+
+
     //menu.sortableOptions = {
     //  dropOnEmpty: true,
     //  placeholder: 'meals',

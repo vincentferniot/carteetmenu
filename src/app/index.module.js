@@ -16,6 +16,7 @@
       'formly',
       'formlyBootstrap',
       'app.authentication',
+      'app.menu',
       'app.admin.profile',
       'app.admin.menu',
       'app.admin.menus',

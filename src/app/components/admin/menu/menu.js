@@ -12,6 +12,7 @@
     menu.availableMeals = [];
     menu.insertedMeals = [];
     menu.title = '';
+    menu.id = '';
     menu.update = update;
 
     Meals.all().then(
@@ -23,9 +24,7 @@
 
             var mealsId = menuModel.get('meals');
             menu.title = menuModel.get('title');
-
-            console.log(_.isUndefined(mealsId));
-            console.log(_.isArray(mealsId));
+            menu.id = menuModel.get('id');
 
             if (_.isArray(mealsId) && !_.isUndefined(mealsId)){
               Menus.getMeals({'menuId': $stateParams.id, 'mealsId': mealsId}).then(

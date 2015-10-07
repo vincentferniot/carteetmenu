@@ -39,6 +39,16 @@
             templateUrl: 'app/partials/header.html' }
         }
       })
+      .state('menu', {
+        url: '/menu/{id}',
+        views: {
+          '': {
+            controller: 'MenuController',
+            controllerAs: 'menu',
+            templateUrl: "app/components/menu/menu.html"
+          }
+        }
+      })
       .state('admin', {
         abstract: true,
         url: '/admin',

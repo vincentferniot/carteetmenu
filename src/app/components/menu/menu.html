@@ -1,37 +1,14 @@
 <div class="container">
-    <div class="menus-button-container clearfix">
-        <a ui-sref="menus" class="btn btn-lg btn-primary"><i class="glyphicon glyphicon-arrow-left"></i> Back to menus list</a>
-    </div>
-
     <div class="row">
-        <div class="col-sm-4">
-            <h2 class="text-center h1">Meals</h2>
-            <ul class="list-unstyled sortable meals-container"
-                ui-sortable="menu.sortableOptions"
-                ng-model="menu.availableMeals">
-
-                <li class="meals" ng-repeat="meal in menu.availableMeals">
+        <div class="col-sm-8">
+            <h1>{{menu.title}}</h1>
+            <ul class="list-unstyled sortable menu-container"
+                ng-model="menu.meals">
+                <li class="meals" ng-repeat="meal in menu.meals">
                     <div style="background-size:cover; background-image:url({{meal.instance.picture[0].file}});" class="img-responsive img-circle picture"></div>
                     {{ meal.instance.title }}
                 </li>
             </ul>
-        </div>
-        <div class="col-sm-8">
-            <form ng-submit="menu.update()" novalidate>
-                <div class="form-group">
-                    <label for="menu-title">Menu title</label>
-                    <input id="menu-title" class="form-control" type="text" class="h1" ng-model="menu.title" value="{{menu.title}}"/>
-                </div>
-                <ul class="list-unstyled sortable menu-container"
-                    ui-sortable="menu.sortableOptions"
-                    ng-model="menu.insertedMeals">
-                    <li class="meals" ng-repeat="meal in menu.insertedMeals">
-                        <div style="background-size:cover; background-image:url({{meal.instance.picture[0].file}});" class="img-responsive img-circle picture"></div>
-                        {{ meal.instance.title }}
-                    </li>
-                </ul>
-                <button class="btn btn-lg btn-success" type="submit">Save</button>
-            </form>
         </div>
     </div>
 </div>
