@@ -8,9 +8,8 @@
     .run(runBlock);
 
   /** @ngInject */
-  function runBlock($log, $rootScope, User, $state) {
+  function runBlock($log, $rootScope, $location, User, $state) {
     var stateCurrentName = $state.current.name.split('.');
-    console.log($state.current)
 
     $log.debug('runBlock end');
     $rootScope.currentUser = {};
@@ -21,7 +20,6 @@
           $rootScope.currentUser.id    = data.get('_id');
           $rootScope.currentUser.name  = data.get('displayName');
           //$rootScope.currentUser.image = data.get('profileImg');
-console.log($state.current.name.split('.').indexOf('admin'))
 
 
           // if it's not an admin page
@@ -31,6 +29,11 @@ console.log($state.current.name.split('.').indexOf('admin'))
         } else {
           // clear the current user just to be sure
           $rootScope.currentUser = {};
+
+          //if (window.location.pathname !== ''){
+          //  window.location.pathname = '';
+          //}
+
 
           //if(stateCurrentName.indexOf('menu') !== 0){
           //  $state.go('home');

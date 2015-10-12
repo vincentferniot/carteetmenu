@@ -31,19 +31,13 @@ body {
   margin-top: $navbar-height + 40;
 }
 
-.logged-in{
-  .hide-on-login {
-    display: none!important;
-  }
-  .show-on-login {
-    display: block!important;
+.user-infos {
+  margin-top: 5px;
+  margin-right: 10px;
+  img {
+    margin-left: 10px;
   }
 }
-
-.show-on-login {
-  display: none!important;
-}
-
 /**
  *  Do not remove this comments bellow. It's the markers used by gulp-inject to inject
  *  all your sass files automatically

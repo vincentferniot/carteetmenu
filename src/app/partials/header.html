@@ -10,14 +10,21 @@
             <li ng-show="!currentUser.id" ng-class="{ active: header.isActive('/authentication')}"><a ui-sref="authentication">Authenticate</a></li>
             <li ng-show="currentUser.id" ng-class="{ active: header.isActive('/admin/menus')}"><a ui-sref="admin.menus">Menus</a></li>
             <li ng-show="currentUser.id" ng-class="{ active: header.isActive('/admin/meals')}"><a ui-sref="admin.meals">Meals</a></li>
-            <li ng-show="currentUser.id" ng-class="{ active: header.isActive('/admin/profile')}"><a ui-sref="admin.profile">Profile</a></li>
         </ul>
-        <ul class="nav navbar-nav navbar-right" ng-if="currentUser.id">
-            <li>
-                <img ng-if="!currentUser.profileImg" src="http://placebear.com/g/40/40" alt="{{currentUser.name}}" class="img-circle img-responsive pull-left"/>
-                <img ng-if="currentUser.profileImg" src="{{currentUser.profileImg}}" alt="{{currentUser.name}}" class="img-circle"/>
-                Welcome {{currentUser.name}}
-                <button type="button" class="btn btn-sm btn-primary" ng-click="header.logout()">Logout</button></li>
-        </ul>
+        <div class="nav navbar-nav navbar-right" ng-if="currentUser.id">
+            <div class="user-infos">
+                <!--<img ng-if="currentUser.profileImg" src="{{currentUser.profileImg}}" alt="{{currentUser.name}}" class="img-circle"/>-->
+                <span class="user-name">Welcome {{currentUser.name}}</span>
+                <div class="btn-group" dropdown is-open="status.isopen">
+                    <a id="single-button" dropdown-toggle ng-disabled="disabled">
+                        <img ng-if="!currentUser.profileImg" src="http://placebear.com/g/40/40" alt="{{currentUser.name}}" class="img-circle img-responsive pull-left"/>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+                        <li role="menuitem"><a ui-sref="admin.profile"><i class="glyphicon glyphicon-cog"></i> Edit your profile</a></li>
+                        <li role="menuitem"><a href="#" ng-click="header.logout()"><i class="glyphicon glyphicon-off"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </nav>

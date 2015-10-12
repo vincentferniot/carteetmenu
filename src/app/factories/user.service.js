@@ -81,8 +81,7 @@
     }
 
     /**
-     * Log the current user out
-     * Will also redirect the browser to the logout url (home)
+     * reset the current user email
      */
     function resetEmail(data) {
       var def = $q.defer();

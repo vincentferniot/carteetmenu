@@ -57,14 +57,14 @@
     }
 
     /** retrieve meals list from a menu **/
-    function getMeals(IDs){
+    function getMeals(data){
       var def = $q.defer();
       var mealCollection = $stamplay.Cobject('meal').Collection;
       var meals = [];
 
       mealCollection.populate().fetch().then(
         function(){
-          angular.forEach(IDs.mealsId, function(id) {
+          angular.forEach(data.mealsID, function(id) {
             var meal = mealCollection.get(id);
 
             /** test if the meal reference hasn't been deleted
@@ -73,10 +73,10 @@
             if (meal !== undefined){
               meals.push(meal);
             } else {
-              IDs.mealsId = _.filter(IDs.mealsId, function(value){
+              data.mealsID = _.filter(data.mealsID, function(value){
                 return value !== id;
               });
-              updateMealReference(IDs);
+              updateMealReference(data);
             }
 
             def.resolve(meals);
@@ -137,10 +137,16 @@
 
       menu.fetch(id).then(
         function(){
-          angular.forEach(data, function(value, key) {
-            menu.set(key, value);
-          });
-          console.log(data);
+
+
+          //angular.forEach(data, function(value, key) {
+          //  console.log('yo');
+          //  console.log(key +' : '+ value);
+          //  menu.set(key, value);
+          //});
+
+          menu.set('title', data.title);
+          menu.set('parts', data.parts);
 
           menu.save()
             .then(function() {
@@ -150,11 +156,6 @@
             });
         }
       );
-
-      // loop over the fields in data and update the product
-
-      // save the object
-
 
       return def.promise;
     }

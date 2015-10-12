@@ -6,40 +6,37 @@
     .controller('AdminMenuController', AdminMenuController);
 
   /** @ngInject */
-  function AdminMenuController(Meals, Menus, $stateParams) {
+  function AdminMenuController(Meals, Menus, $stateParams, $scope) {
     var menu = this;
 
+    menu.mealCollection = [];
     menu.availableMeals = [];
     menu.insertedMeals = [];
     menu.title = '';
     menu.id = '';
+    menu.parts = {
+      data: [],
+      model: []
+    };
+
     menu.update = update;
+    menu.addPart = addPart;
+    menu.deletePart = deletePart;
+    menu.displayMeals = displayMeals;
 
     Meals.all().then(
       function(mealCollection){
+        menu.mealCollection = _.clone(mealCollection);
 
         Menus.getMenuById($stateParams.id).then(
-
           function(menuModel){
-
-            var mealsId = menuModel.get('meals');
             menu.title = menuModel.get('title');
             menu.id = menuModel.get('id');
-
-            if (_.isArray(mealsId) && !_.isUndefined(mealsId)){
-              Menus.getMeals({'menuId': $stateParams.id, 'mealsId': mealsId}).then(
-                function(meals){
-                  menu.insertedMeals = meals;
-                }
-              );
-            }
-
-            mealCollection.remove(mealsId);
-            menu.availableMeals = mealCollection.instance;
-
+            menu.parts.data = menuModel.get('parts');
+            menu.displayMeals(mealCollection);
           });
     });
-
+    //[{"title":"Entrées","id":["561626cbf9c21300285c44df","56154d9af9c21300285c426a"]},{"title":"Plats","id":["560d8bcdfe5c006e29d407f9","56162832f9c21300285c44e1","560e5a4bfe5c006e29d409ae"]}]
 
     /** ui-sortable options **/
     menu.sortableOptions = {
@@ -48,21 +45,107 @@
       cursor: 'move',
       opacity: 0.5
       //stop: function(e, ui){
-      //  console.log(menu.insertedMeals);
       //  //console.log(ui.item.sortable.sourceModel[0].instance._id);
       //}
     };
 
-    function update(){
-      var data = {};
-      var mealsID = [];
+    menu.sortableContainerOptions = {
+      placeholder: 'menu-container',
+      connectWith: '.sortable-container',
+      cursor: 'move',
+      opacity: 0.5
+    };
 
-      angular.forEach(menu.insertedMeals, function(meal){
-        mealsID.push(meal.get('id'));
+    function displayMeals(mealCollection){
+      var count = 0;
+
+      angular.forEach(menu.parts.data, function(part){
+
+        var title = !_.isEmpty(part.title) ? part.title : '';
+        var meals = [];
+
+        if (_.isArray(part.mealsID) && !_.isUndefined(part.mealsID) && !_.isEmpty(part.mealsID)){
+
+          angular.forEach(part.mealsID, function(id){
+
+            if(mealCollection.get(id)){
+              meals.push(mealCollection.get(id));
+            }
+          });
+
+          //Menus.getMeals({'menuId': $stateParams.id, 'mealsId': meal.id}).then(
+          //  function(data){
+          //    meals = data;
+          //    menu.part.splice(count, 0, {
+          //      title: title,
+          //      meals: meals
+          //    });
+          //  }
+          //);
+
+          mealCollection.remove(part.mealsID);
+        }
+
+        menu.parts.model.splice(count, 1, {
+          title: title,
+          meals: meals
+        });
+
+        count++
       });
-      console.log(mealsID);
 
-      data.meals = mealsID;
+      menu.availableMeals = mealCollection.instance;
+    }
+
+    /**
+     * add part to the menu
+     */
+    function addPart(){
+      var newPart = {
+        title: '',
+        meals: []
+      };
+
+      menu.parts.model.push(newPart);
+      menu.parts.data[menu.parts.data.length] = newPart;
+    }
+
+    /**
+     * delete part from the menu
+     * @param index
+     */
+    function deletePart(index){
+      var keys = _.keys(menu.parts.data);
+
+      menu.parts.model.splice(index, 1);
+      delete menu.parts.data[keys[index]];
+      menu.displayMeals(_.clone(menu.mealCollection));
+    }
+
+    /**
+     * save menu
+     */
+    function update(){
+      var parts = {};
+      var data = [];
+      var count = 0;
+
+      angular.forEach(menu.parts.model, function(part){
+        var mealsID = [];
+
+        angular.forEach(part.meals, function(meal){
+          mealsID.push(meal.get('id'));
+        });
+
+        parts[count] = {
+          title: part.title,
+          mealsID: mealsID
+        };
+
+        count++;
+      });
+
+      data.parts = parts;
       data.title = menu.title;
 
       Menus.update($stateParams.id, data).then(
@@ -70,34 +153,7 @@
           toastr.success('Your menu has been updated successfully', 'Menu update');
         }
       );
-
     }
-    //menu.sortableOptions = {
-    //  dropOnEmpty: true,
-    //  placeholder: 'meals',
-    //  connectWith: '.sortable',
-    //  cursor: 'move',
-    //  opacity: 0.5,
-    //  stop: function(e, ui){
-    //    console.log(menu.insertedMeals);
-    //    //console.log(ui.item.sortable.sourceModel[0].instance._id);
-    //  }
-    //};
-
-    ///** ui-sortable options **/
-    //menu.menuOptions = {
-    //  connectWith: '.meals-container',
-    //  stop: function(e, ui){
-    //    console.log(menu.insertedMeals);
-    //    //console.log(ui.item.sortable.sourceModel[0].instance._id);
-    //  }
-    //};
-
-
-
-
-
-
 
     //$scope.draggableOptions = {
     //  connectWith: ".connected-drop-target-sortable",

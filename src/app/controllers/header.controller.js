@@ -6,7 +6,7 @@
     .controller('HeaderController', HeaderController);
 
   /** @ngInject */
-  function HeaderController($location, $state, User) {
+  function HeaderController($location, User) {
     var header = this;
 
     header.isActive = isActive;
@@ -18,7 +18,6 @@
 
     function logout(){
       User.logout();
-      $state.go('home');
     }
   }
 })();

@@ -12,8 +12,18 @@
             <div class="col-sm-6 col-md-4" ng-repeat="menu in menus.items">
                 <div class="well menu">
                     <h2>{{menu.instance.title}}</h2>
-                    <a ui-sref="admin.menu({id: menu.instance.id})" class="btn btn-success" role="link"><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                    <button role="button" type="button" class="btn btn-danger" ng-click="menus.destroy({id: menu.instance.id, title: menu.instance.title})"><i class="glyphicon glyphicon-remove-circle"></i> Delete</button>
+                    <ul class="list-unstyled list-inline">
+                        <li>
+                            <a ui-sref="menu({id: menu.instance.id})" class="btn btn-success" tooltip="See"><i class="glyphicon glyphicon-eye-open"></i></a>
+                        </li>
+                        <li>
+                            <a ui-sref="admin.menu({id: menu.instance.id})" class="btn btn-success" role="link" tooltip="Edit"><i class="glyphicon glyphicon-edit"></i></a>
+                        </li>
+                        <li>
+                            <button role="button" type="button" class="btn btn-danger" ng-click="menus.destroy({id: menu.instance.id, title: menu.instance.title})" tooltip="Delete"><i class="glyphicon glyphicon-remove-circle"></i></button>
+                        </li>
+                    </ul>
+
                 </div>
             </div>
         </div>

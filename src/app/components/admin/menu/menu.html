@@ -1,7 +1,6 @@
 <div class="container">
     <div class="menus-button-container clearfix">
         <a ui-sref="admin.menus" class="btn btn-lg btn-primary"><i class="glyphicon glyphicon-arrow-left"></i> Back to menus list</a>
-        <a ui-sref="menu({id: menu.id})" class="btn btn-lg btn-success">See menu</a>
     </div>
 
     <div class="row">
@@ -23,15 +22,32 @@
                     <label for="menu-title">Menu title</label>
                     <input id="menu-title" class="form-control" type="text" class="h1" ng-model="menu.title" value="{{menu.title}}"/>
                 </div>
-                <ul class="list-unstyled sortable menu-container"
-                    ui-sortable="menu.sortableOptions"
-                    ng-model="menu.insertedMeals">
-                    <li class="meals" ng-repeat="meal in menu.insertedMeals">
-                        <div style="background-size:cover; background-image:url({{meal.instance.picture[0].file}});" class="img-responsive img-circle picture"></div>
-                        {{ meal.instance.title }}
-                    </li>
-                </ul>
-                <button class="btn btn-lg btn-success" type="submit">Save</button>
+                <div class="menu-container sortable-container" ui-sortable="menu.sortableContainerOptions" ng-model="menu.parts.model">
+                    <div ng-repeat="part in menu.parts.model">
+                        <button type="button" class="btn btn-sm btn-danger pull-right" ng-click="menu.deletePart($index)"><i class="glyphicon glyphicon-remove-circle"></i></button>
+
+                        <div class="form-group">
+                            <label for="part-title">Part title</label>
+                            <input id="part-title" class="form-control" type="text" class="h2" ng-model="menu.parts.model[$index].title" value="{{menu.parts.model[$index].title}}"/>
+                        </div>
+                        <ul class="list-unstyled sortable meals-list"
+                            ui-sortable="menu.sortableOptions"
+                            ng-model="menu.parts.model[$index].meals">
+                            <li class="meals" ng-repeat="meal in menu.parts.model[$index].meals">
+                                <div style="background-size:cover; background-image:url({{meal.instance.picture[0].file}});" class="img-responsive img-circle picture"></div>
+                                {{ meal.instance.title }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="well">
+                    <button type="button" class="btn btn-md btn-success" ng-click="menu.addPart()"><i class="glyphicon glyphicon-plus-sign"></i></button>
+                     Add a part to your menu
+                </div>
+                <button class="btn btn-success" type="submit">Save</button>
+                <button class="btn btn-success" type="button">Embed</button>
+                <a ui-sref="menu({id: menu.id})" class="btn btn-success">See menu</a>
+
             </form>
         </div>
     </div>

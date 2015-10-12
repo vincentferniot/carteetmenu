@@ -2,13 +2,16 @@
     <div class="row">
         <div class="col-sm-8">
             <h1>{{menu.title}}</h1>
-            <ul class="list-unstyled sortable menu-container"
-                ng-model="menu.meals">
-                <li class="meals" ng-repeat="meal in menu.meals">
-                    <div style="background-size:cover; background-image:url({{meal.instance.picture[0].file}});" class="img-responsive img-circle picture"></div>
-                    {{ meal.instance.title }}
-                </li>
-            </ul>
+
+            <div class="menu-container" ng-repeat="part in menu.parts">
+                <h2>{{part.title}}</h2>
+                <ul class="list-unstyled">
+                    <li class="meals" ng-repeat="meal in menu.insertedMeals[$index]">
+                        <div style="background-size:cover; background-image:url({{meal.instance.picture[0].file}});" class="img-responsive img-circle picture"></div>
+                        {{ meal.instance.title }}
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
