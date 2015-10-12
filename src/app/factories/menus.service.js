@@ -6,7 +6,7 @@
     .factory('Menus', MenusService);
 
   /**@ngInject**/
-  function MenusService($stamplay, $q,User) {
+  function MenusService($stamplay, $q, User) {
 
     // return an object with all our functions
     return {
@@ -33,7 +33,7 @@
               def.resolve(menuCollection);
             }, function(){
               def.reject({'error': 'Unable to retrieve meals data.'});
-            })
+            });
         });
 
       return def.promise;
@@ -76,6 +76,7 @@
               data.mealsID = _.filter(data.mealsID, function(value){
                 return value !== id;
               });
+
               updateMealReference(data);
             }
 
@@ -88,16 +89,14 @@
 
 
     /** update meals ID reference in menu **/
-    function updateMealReference(IDs){
+    function updateMealReference(data){
       var menuModel = $stamplay.Cobject('menu').Model;
 
-      menuModel.fetch(IDs.menuId).then(
+      menuModel.fetch(data.menuID).then(
         function(){
 
-          menuModel.set('meals', IDs.mealsId);
-          menuModel.save().then(function(){
-            console.log('meal reference updated')
-          });
+          menuModel.set('meals', data.mealsID);
+          menuModel.save();
         }
       );
     }
@@ -126,8 +125,9 @@
 
       return def.promise;
     }
+
     /**
-     * ADD a menu
+     * UPDATE a menu
      */
     function update(id, data) {
       var def = $q.defer();

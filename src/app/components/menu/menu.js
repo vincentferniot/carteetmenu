@@ -19,7 +19,7 @@
 
         menu.title = menuModel.get('title');
         menu.id = menuModel.get('id');
-        menu.parts = menuModel.get('parts');;
+        menu.parts = menuModel.get('parts');
 
         angular.forEach(menu.parts, function(part){
 
@@ -31,7 +31,6 @@
             );
           }
         });
-
       });
   }
 })();

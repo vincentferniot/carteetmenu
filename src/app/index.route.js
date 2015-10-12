@@ -6,8 +6,9 @@
     .config(routeConfig);
 
   /** @ngInject */
-  function routeConfig($stateProvider, $urlRouterProvider, $locationProvider) {
+  function routeConfig($stateProvider, $urlRouterProvider) {
 
+    // todo: à réactiver quand Stamplay sera OK, fout la zone pour récupérer l'URL d'un menu dans une iframe
     //$locationProvider.html5Mode(true);
 
     $stateProvider

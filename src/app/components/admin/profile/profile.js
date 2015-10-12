@@ -76,7 +76,7 @@
           function(){
             toastr.success('Your password has been successfully updated, <br><strong>check your email account to confirm changes !!</strong>');
         }, function(){
-            toastr.error('Something went wrong, try again later.')
+            toastr.error('Something went wrong, try again later.');
           });
       },
       model: {

@@ -31,7 +31,7 @@
               def.resolve(mealCollection);
             }, function(){
               def.reject({'error': 'Unable to retrieve meals data.'});
-            })
+            });
 
         });
 
@@ -62,7 +62,7 @@
     function create(data) {
       var def = $q.defer();
 
-      // instanticate a new product model from the stamplay js sdk
+      // instantiate a new product model from the stamplay js sdk
       var mealModel = $stamplay.Cobject('meal').Model;
 
       // loop over the fields in data and update the product

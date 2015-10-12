@@ -6,7 +6,7 @@
     .controller('AdminMenuController', AdminMenuController);
 
   /** @ngInject */
-  function AdminMenuController(Meals, Menus, $stateParams, $scope) {
+  function AdminMenuController(Meals, Menus, $stateParams) {
     var menu = this;
 
     menu.mealCollection = [];
@@ -91,7 +91,7 @@
           meals: meals
         });
 
-        count++
+        count++;
       });
 
       menu.availableMeals = mealCollection.instance;
@@ -106,8 +106,10 @@
         meals: []
       };
 
+      var index = menu.parts.data.length ? menu.parts.data.length : 0;
+
       menu.parts.model.push(newPart);
-      menu.parts.data[menu.parts.data.length] = newPart;
+      menu.parts.data[index] = newPart;
     }
 
     /**

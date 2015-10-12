@@ -8,8 +8,7 @@
     .run(runBlock);
 
   /** @ngInject */
-  function runBlock($log, $rootScope, $location, User, $state) {
-    var stateCurrentName = $state.current.name.split('.');
+  function runBlock($log, $rootScope, User) {
 
     $log.debug('runBlock end');
     $rootScope.currentUser = {};
