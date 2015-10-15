@@ -12,6 +12,7 @@
     return {
       all: all,
       getMenuById: getMenuById,
+      getMenuTemplate: getMenuTemplate,
       getMeals: getMeals,
       create: create,
       update: update,
@@ -50,6 +51,23 @@
         },
         function(){
           def.reject({'error': 'Unable to retrieve menu data.'});
+        }
+      );
+
+      return def.promise;
+    }
+
+    /** return the menu template **/
+    function getMenuTemplate(templateID){
+      var def = $q.defer();
+      var template = $stamplay.Cobject('template').Model;
+
+      template.fetch(templateID).then(
+        function(){
+          def.resolve(template);
+        },
+        function(){
+          def.reject({'error': 'Unable to retrieve template data.'});
         }
       );
 

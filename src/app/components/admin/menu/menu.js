@@ -14,6 +14,8 @@
     menu.insertedMeals = [];
     menu.title = '';
     menu.id = '';
+    menu.template = '';
+    menu.embedCode = '';
     menu.parts = {
       data: [],
       model: []
@@ -34,6 +36,19 @@
             menu.id = menuModel.get('id');
             menu.parts.data = menuModel.get('parts');
             menu.displayMeals(mealCollection);
+            menu.embedCode = '<iframe ' +
+              'src="https://carteetmenu.stamplayapp.com/#/menu/'+ menu.id +'" ' +
+              'frameborder="0" ' +
+              'height="800" ' +
+              'width="600" ' +
+              'name="'+ menu.title +'"></iframe>';
+
+
+            Menus.getMenuTemplate(menuModel.get('template')).then(
+              function(template){
+                menu.template = template.instance;
+              }
+            );
           });
     });
     //[{"title":"Entrées","id":["561626cbf9c21300285c44df","56154d9af9c21300285c426a"]},{"title":"Plats","id":["560d8bcdfe5c006e29d407f9","56162832f9c21300285c44e1","560e5a4bfe5c006e29d409ae"]}]

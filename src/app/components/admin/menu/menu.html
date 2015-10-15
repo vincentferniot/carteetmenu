@@ -1,22 +1,20 @@
-<div class="container">
-    <div class="menus-button-container clearfix">
-        <a ui-sref="admin.menus" class="btn btn-lg btn-primary"><i class="glyphicon glyphicon-arrow-left"></i> Back to menus list</a>
+<div class="container-fluid">
+    <div class="fixed-col">
+        <a ui-sref="admin.menus" class="btn btn-lg btn-primary btn-block btn-back-menus"><i class="glyphicon glyphicon-arrow-left"></i> Back to menus list</a>
+        <h2 class="text-center h1">Meals</h2>
+        <ul class="list-unstyled sortable meals-container"
+            ui-sortable="menu.sortableOptions"
+            ng-model="menu.availableMeals">
+
+            <li class="meals" ng-repeat="meal in menu.availableMeals">
+                <div style="background-size:cover; background-image:url({{meal.instance.picture[0].file}});" class="img-responsive img-circle picture"></div>
+                {{ meal.instance.title }}
+            </li>
+        </ul>
     </div>
-
     <div class="row">
-        <div class="col-sm-4">
-            <h2 class="text-center h1">Meals</h2>
-            <ul class="list-unstyled sortable meals-container"
-                ui-sortable="menu.sortableOptions"
-                ng-model="menu.availableMeals">
 
-                <li class="meals" ng-repeat="meal in menu.availableMeals">
-                    <div style="background-size:cover; background-image:url({{meal.instance.picture[0].file}});" class="img-responsive img-circle picture"></div>
-                    {{ meal.instance.title }}
-                </li>
-            </ul>
-        </div>
-        <div class="col-sm-8">
+        <div class="col-sm-8 col-sm-offset-4">
             <form ng-submit="menu.update()" novalidate>
                 <div class="form-group">
                     <label for="menu-title">Menu title</label>
@@ -44,8 +42,10 @@
                     <button type="button" class="btn btn-md btn-success" ng-click="menu.addPart()"><i class="glyphicon glyphicon-plus-sign"></i></button>
                      Add a part to your menu
                 </div>
+                <textarea ng-show="showEmbedCode" class="form-control" rows="3" ng-model="menu.embedCode"></textarea>
+
                 <button class="btn btn-success" type="submit">Save</button>
-                <button class="btn btn-success" type="button">Embed</button>
+                <button class="btn btn-success" type="button" ng-click="showEmbedCode = !showEmbedCode">Embed</button>
                 <a ui-sref="menu({id: menu.id})" class="btn btn-success">See menu</a>
 
             </form>

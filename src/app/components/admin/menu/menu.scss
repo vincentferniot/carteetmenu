@@ -18,3 +18,15 @@
     cursor: move;
   }
 }
+
+.fixed-col {
+  position: fixed;
+  width: 350px;
+  height: 100%;
+  background-color: whitesmoke;
+  top: 50px;
+  left: 0;
+  .btn-back-menus {
+    border-radius: 0;
+  }
+}
