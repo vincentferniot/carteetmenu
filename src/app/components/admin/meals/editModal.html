@@ -5,7 +5,7 @@
     <form ng-submit="editedMeal.update()" novalidate>
         <formly-form model="editedMeal.models.formly" fields="editedMeal.fields" form="editedMeal.form">
         </formly-form>
-        <div class="meal-thumbnail" style="background-size:cover; background-image:url({{editedMeal.originalPicture}});" alt="" class="img-responsive img-circle"/>
+        <div class="meal-thumbnail img-responsive img-circle" style="background-size:cover; background-image:url({{editedMeal.originalPicture}});"></div>
         <div class="form-group">
             <div>
                 <label>Choose a picture</label>
