@@ -1,0 +1,37 @@
+<div class="modal-header">
+    <h3 class="modal-title">Edit your meal</h3>
+</div>
+<div class="modal-body">
+    <form ng-submit="editedMeal.update()" novalidate>
+        <formly-form model="editedMeal.models.formly" fields="editedMeal.fields" form="editedMeal.form">
+        </formly-form>
+        <div class="meal-thumbnail" style="background-size:cover; background-image:url({{editedMeal.originalPicture}});" alt="" class="img-responsive img-circle"/>
+        <div class="form-group">
+            <div>
+                <label>Choose a picture</label>
+                <div class="well">
+
+                    <div class="drop-box" ngf-drop ng-model="editedMeal.models.picture"
+                         ngf-drag-over-class="dragover" ngf-multiple="false"
+                         ngf-pattern="'image/*'">Drop image file here</div>
+                    <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+                    <p class="text-center">or</p>
+                    <div class="btn btn-sm btn-primary btn-block" ngf-select ng-model="editedMeal.models.picture" accept="image/*" ngf-max-size="1MB">
+                        Select Files
+                    </div>
+                </div>
+            </div>
+            <!-- show a preview -->
+            <div class="well" ng-show="editedMeal.models.picture">
+                <img class="img-responsive" ngf-src="editedMeal.models.picture">
+                <button type="button" ng-click="editedMeal.models.picture = {}" class="glyphicon glyphicon-remove"></button>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" ng-disabled="editedMeal.form.$invalid">
+            Submit
+        </button>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="editedMeal.cancel()">Cancel</button>
+</div>

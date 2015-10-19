@@ -6,13 +6,13 @@
     .factory('Meals', MealsService);
 
   /**@ngInject**/
-  function MealsService($stamplay, $q, $http, User) {
+  function MealsService($stamplay, $q, User) {
 
     // return an object with all our functions
     return {
       all: all,
       create: create,
-      createPicture: createPicture,
+      update: update,
       destroy: destroy,
       getMealById: getMealById
     };
@@ -81,28 +81,53 @@
       return def.promise;
     }
 
+    ///**
+    // * Create a picture
+    // */
+    //function createPicture(file) {
+    //  var def = $q.defer();
+    //
+    //  // create a new formdata
+    //  var fd = new FormData();
+    //  fd.append('file', file);
+    //
+    //  // process the upload
+    //  $http({
+    //    method: 'POST',
+    //    url: 'https://carteetmenu.stamplayapp.com/api/cobject/v1/pictures',
+    //    data: fd,
+    //    headers: { 'Content-Type': undefined },
+    //    file: file
+    //  }).then(
+    //    function(response) {
+    //      // push the given id into the pictureIDs array
+    //      def.resolve({ picture: response.data.id });
+    //    });
+    //
+    //  return def.promise;
+    //}
+
     /**
-     * Create a picture
+     * UPDATE a meal
      */
-    function createPicture(file) {
+    function update(id, data) {
       var def = $q.defer();
+      var meal = $stamplay.Cobject('meal').Model;
 
-      // create a new formdata
-      var fd = new FormData();
-      fd.append('file', file);
+      meal.fetch(id).then(
+        function(){
 
-      // process the upload
-      $http({
-        method: 'POST',
-        url: 'https://carteetmenu.stamplayapp.com/api/cobject/v1/pictures',
-        data: fd,
-        headers: { 'Content-Type': undefined },
-        file: file
-      }).then(
-        function(response) {
-          // push the given id into the pictureIDs array
-          def.resolve({ picture: response.data.id });
-        });
+          meal.set('title', data.title);
+          meal.set('desc', data.desc);
+
+          meal.save()
+            .then(function() {
+              def.resolve(meal);
+            }, function(){
+              def.reject({'error': 'Unable to update your meal.'});
+            });
+        }
+      );
 
       return def.promise;
     }

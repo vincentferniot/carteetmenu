@@ -17,6 +17,7 @@
       positionClass: 'toast-top-right',
       preventDuplicates: true
     };
+
   }
 
 })();

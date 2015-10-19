@@ -1,7 +1,5 @@
 <div class="container">
     <div class="row">
-        <!-- SIGNUP =============================== -->
-        <h1>Your collection of meals</h1>
         <div class="col-sm-6">
             <div class="jumbotron">
                 <p class="h2"><i class="glyphicon glyphicon-plus-sign"></i> Add a meal</p>
@@ -34,16 +32,22 @@
             </div>
         </div>
         <div class="col-sm-6">
-            <div class="text-center"  ng-repeat="meal in meals.items">
+            <h2>Your collection of meals</h2>
+
+            <div class="page-header"  ng-repeat="meal in meals.items">
                 <div class="meal-nav pull-right">
-                    <button type="button" ng-click="meals.edit(meal.instance.id)" class="glyphicon glyphicon-edit"></button>
-                    <button type="button" ng-click="meals.destroy({id: meal.instance.id, title: meal.instance.title})" class="glyphicon glyphicon-remove"></button>
+                    <button type="button" ng-click="meals.edit(meal.instance)" class="btn btn-md btn-success"><i class="glyphicon glyphicon-edit"></i></button>
+                    <button type="button" ng-click="meals.destroy({id: meal.instance.id, title: meal.instance.title})" class="btn btn-md btn-danger"><i class="glyphicon glyphicon-remove-circle"></i></button>
                 </div>
-                <h2 class="page-header">{{meal.instance.title}}</h2>
-                <a class="" href="{{meal.instance.picture[0].file}}" rel="lightbox">
-                    <div class="meal-thumbnail center-block" style="background-size:cover; background-image:url({{meal.instance.picture[0].file}});" alt="" class="img-responsive img-circle"/>
-                </a>
-                <p>{{meal.instance.desc}}</p>
+                <div class="meal-elements">
+                    <a class="pull-left" href="{{meal.instance.picture[0].file}}" rel="lightbox">
+                        <div class="meal-thumbnail" style="background-size:cover; background-image:url({{meal.instance.picture[0].file}});" alt="" class="img-responsive img-circle"/>
+                    </a>
+                    <div class="meal-texts">
+                        <h2 class="h3">{{meal.instance.title}}</h2>
+                        <p>{{meal.instance.desc}}</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

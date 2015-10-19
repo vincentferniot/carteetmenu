@@ -13,8 +13,14 @@
 .dragover {
   background: lighten(darkgreen, 78%);
 }
-
+.meal-elements {
+  text-align: left;
+  .meal-texts {
+    
+  }
+}
 .meal-thumbnail {
-  @include square(100px);
+  @include square(50px);
   border-radius: 100%;
+  margin-right: 15px;
 }

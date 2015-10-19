@@ -16,10 +16,9 @@
     menu.id = '';
     menu.template = '';
     menu.embedCode = '';
-    menu.parts = {
-      data: [],
-      model: []
-    };
+    menu.parts = {};
+    menu.parts.data = [];
+    menu.parts.model = [];
 
     menu.update = update;
     menu.addPart = addPart;
@@ -120,8 +119,13 @@
         title: '',
         meals: []
       };
+      var index = 0;
 
-      var index = menu.parts.data.length ? menu.parts.data.length : 0;
+      if (!_.isUndefined(menu.parts.data)){
+        index = menu.parts.data.length;
+      } else {
+        menu.parts.data = [];
+      }
 
       menu.parts.model.push(newPart);
       menu.parts.data[index] = newPart;

@@ -10,8 +10,8 @@
       'ngSanitize',
       'ngResource',
       'ngFileUpload',
-      'ui.router',
       'ui.bootstrap',
+      'ui.router',
       'ui.sortable',
       'formly',
       'formlyBootstrap',
@@ -23,6 +23,7 @@
       'app.admin.meals',
       'MenusService',
       'MealsService',
+      'PictureService',
       'UserService'
     ]);
 
