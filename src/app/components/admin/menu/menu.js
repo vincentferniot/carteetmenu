@@ -14,7 +14,7 @@
     menu.insertedMeals = [];
     menu.title = '';
     menu.id = '';
-    menu.template = '';
+    menu.templateID = '';
     menu.embedCode = '';
     menu.parts = {};
     menu.parts.data = [];
@@ -27,7 +27,7 @@
 
     Meals.all().then(
       function(mealCollection){
-        menu.mealCollection = _.clone(mealCollection);
+        angular.copy(mealCollection, menu.mealCollection);
 
         Menus.getMenuById($stateParams.id).then(
           function(menuModel){
@@ -42,12 +42,12 @@
               'width="600" ' +
               'name="'+ menu.title +'"></iframe>';
 
-
-            Menus.getMenuTemplate(menuModel.get('template')).then(
-              function(template){
-                menu.template = template.instance;
-              }
-            );
+            menu.templateID = menuModel.get('template')[0];
+            //Menus.getMenuTemplate(menuModel.get('template')).then(
+            //  function(template){
+            //    menu.template = template.instance;
+            //  }
+            //);
           });
     });
     //[{"title":"Entrées","id":["561626cbf9c21300285c44df","56154d9af9c21300285c426a"]},{"title":"Plats","id":["560d8bcdfe5c006e29d407f9","56162832f9c21300285c44e1","560e5a4bfe5c006e29d409ae"]}]
@@ -57,12 +57,18 @@
       placeholder: 'meals',
       connectWith: '.sortable',
       cursor: 'move',
-      opacity: 0.5
-      //stop: function(e, ui){
-      //  //console.log(ui.item.sortable.sourceModel[0].instance._id);
-      //}
-    };
+      opacity: 0.5,
+      stop: function(e, ui){
+        //console.log(ui.item.sortable);
+        //console.log(ui.item.sortable.model.instance.id);
+        //console.log(ui.item.sortable.source);
+        //console.log(ui.item.sortable.sourceModel);
+        //console.log(ui.item);
 
+        addMealToPart();
+      }
+    };
+    /** ui-sortable meal container options **/
     menu.sortableContainerOptions = {
       placeholder: 'menu-container',
       connectWith: '.sortable-container',
@@ -70,8 +76,13 @@
       opacity: 0.5
     };
 
+    /**
+     * Display meals
+     * @param mealCollection
+     */
     function displayMeals(mealCollection){
       var count = 0;
+      console.log(mealCollection);
 
       angular.forEach(menu.parts.data, function(part){
 
@@ -122,7 +133,7 @@
       var index = 0;
 
       if (!_.isUndefined(menu.parts.data)){
-        index = menu.parts.data.length;
+        index = _.size(menu.parts.data);
       } else {
         menu.parts.data = [];
       }
@@ -137,10 +148,14 @@
      */
     function deletePart(index){
       var keys = _.keys(menu.parts.data);
+      var mealCollection = angular.copy(menu.mealCollection);
 
       menu.parts.model.splice(index, 1);
       delete menu.parts.data[keys[index]];
-      menu.displayMeals(_.clone(menu.mealCollection));
+      //angular.copy(menu.mealCollection, mealCollection);
+      //console.log(menu.mealCollection);
+      console.log(mealCollection);
+      menu.displayMeals(mealCollection);
     }
 
     /**
@@ -168,12 +183,33 @@
 
       data.parts = parts;
       data.title = menu.title;
+      data.template = menu.templateID;
 
       Menus.update($stateParams.id, data).then(
         function(){
           toastr.success('Your menu has been updated successfully', 'Menu update');
         }
       );
+    }
+
+    function addMealToPart(){
+      var count = 0;
+      angular.forEach(menu.parts.model, function(part){
+        //var mealsID = [];
+        console.log(menu.parts.data);
+
+        angular.forEach(part.meals, function(meal){
+          menu.parts.data[count].mealsID.push(meal.get('id'));
+        });
+
+
+        //parts[count] = {
+        //  title: part.title,
+        //  mealsID: mealsID
+        //};
+
+        count++;
+      });
     }
 
     //$scope.draggableOptions = {

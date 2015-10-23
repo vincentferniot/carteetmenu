@@ -58,7 +58,6 @@
         file: data.file
       }).then(
         function(response) {
-          // push the given id into the pictureIDs array
           def.resolve({ picture: response.data.id });
         });
 

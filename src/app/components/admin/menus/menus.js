@@ -34,7 +34,9 @@
 
     function create(){
       var menuData = {
-        title: menus.model.title
+        title: menus.model.title,
+        //todo: mettre le template par défaut dans le cache
+        template: '561c10a793bd963f3ab95d68'
       };
 
       Menus.create(menuData).then(

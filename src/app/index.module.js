@@ -24,7 +24,8 @@
       'MenusService',
       'MealsService',
       'PictureService',
-      'UserService'
+      'UserService',
+      'MenuTemplatesService'
     ]);
 
 })();

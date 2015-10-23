@@ -3,25 +3,25 @@
         <div class="col-sm-6">
             <div class="jumbotron">
                 <p class="h2"><i class="glyphicon glyphicon-plus-sign"></i> Add a meal</p>
-                <form ng-submit="meals.check()" novalidate>
-                    <formly-form model="meals.model.formly" fields="meals.fields" form="meals.form">
+                <form ng-submit="meals.create()" novalidate>
+                    <formly-form model="meals.models.formly" fields="meals.fields" form="meals.form">
                     </formly-form>
                     <div class="form-group">
                         <label>Choose a picture</label>
                         <div class="well">
 
-                            <div class="drop-box" ngf-drop ng-model="meals.model.picture"
+                            <div class="drop-box" ngf-drop ng-model="meals.models.picture"
                                  ngf-drag-over-class="dragover" ngf-multiple="false"
                                  ngf-pattern="'image/*'">Drop image file here</div>
                             <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
                             <p class="text-center">or</p>
-                            <div class="btn btn-sm btn-primary btn-block" ngf-select ng-model="meals.model.picture" accept="image/*" ngf-max-size="1MB">
+                            <div class="btn btn-sm btn-primary btn-block" ngf-select ng-model="meals.models.picture" accept="image/*" ngf-max-size="1MB">
                                 Select Files
                             </div>
                         </div>
                         <!-- show a preview -->
-                        <div class="well" ng-show="meals.model.picture">
-                            <img class="img-responsive" ngf-src="meals.model.picture">
+                        <div class="well" ng-show="meals.models.picture">
+                            <img class="img-responsive" ngf-src="meals.models.picture">
                             <button type="button" ng-click="meals.resetPictureModel()" class="glyphicon glyphicon-remove"></button>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
 
             <div class="page-header"  ng-repeat="meal in meals.items">
                 <div class="meal-nav pull-right">
-                    <button type="button" ng-click="meals.edit(meal.instance)" class="btn btn-md btn-success"><i class="glyphicon glyphicon-edit"></i></button>
+                    <button type="button" ng-click="meals.openModal(meal.instance)" class="btn btn-md btn-success"><i class="glyphicon glyphicon-edit"></i></button>
                     <button type="button" ng-click="meals.destroy({id: meal.instance.id, title: meal.instance.title})" class="btn btn-md btn-danger"><i class="glyphicon glyphicon-remove-circle"></i></button>
                 </div>
                 <div class="meal-elements">

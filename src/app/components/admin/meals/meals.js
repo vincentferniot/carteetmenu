@@ -8,16 +8,19 @@
 
 
   /** @ngInject */
-  function AdminMealsController(Meals, $modal, $timeout, $stamplay, $rootScope, Picture) {
+  function AdminMealsController(Meals, $modal, $timeout, $stamplay, $scope, $q, $rootScope, Picture) {
     var meals = this;
 
     meals.items = {};
     meals.collection = {};
-    meals.check = check;
+    meals.create = create;
+    meals.createPicture = createPicture;
     meals.destroy = destroy;
-    meals.edit = edit;
+    meals.openModal = openModal;
+    meals.render = render;
     meals.resetPictureModel = resetPictureModel;
-    meals.model = {};
+    meals.update = update;
+    meals.models = {};
     meals.fields = [
       {
         key: 'title',
@@ -40,98 +43,163 @@
     ];
 
 
-
-    function check(){
-
-      var mealData = {
-        title: meals.model.formly.title,
-        desc: meals.model.formly.desc
+    /**
+     * Tests whether a picture was added to the meal
+     */
+    function create(){
+      var data = {
+        title: meals.models.formly.title,
+        desc: meals.models.formly.desc
       };
-
-      if (typeof meals.model.picture === 'object'){
-        Picture.create(meals.model.picture).then(
-          function(data){
-            mealData.picture = data.picture;
-            mealData.title = meals.model.formly.title;
-            mealData.desc = meals.model.formly.desc;
-
-            create(mealData);
-          });
+      /**
+       * test if the picture value is an object
+       * which means it has a picture included
+       */
+      if (typeof meals.models.picture === 'object'){
+        createPicture(meals.models.picture).then(
+          function(response){
+            data.picture = response.picture;
+            createMeal(data);
+          }
+        );
       } else {
-        create(mealData);
+        createMeal(data);
       }
     }
 
-    function create(data){
+    /**
+     * Create meal
+     * @param data
+     */
+    function createMeal(data){
 
       Meals.create(data).then(
         function(meal){
           toastr.success('Your meal <strong>'+ meal.get('title') +'</strong> has been created.');
-          update();
-          meals.model.formly = {};
-          meals.model.picture = undefined;
+          render();
+          resetForm();
         }, function(data){
           toastr.error(data.error);
         });
     }
 
+    /**
+     * Create picture
+     * @param file
+     * @returns {*}
+     */
+    function createPicture(file){
+      var def = $q.defer();
 
-    function update(data){
-
-      if (data){
-        var mealModel = meals.collection.get(data.id);
-        var picture = $stamplay.Cobject('pictures').Model;
-        var mealPicture = mealModel.get('picture');
-
-        picture.fetch(mealPicture[0].id).then(function(){
-
-          console.log(picture);
-
-          $timeout(function(){
-            mealModel.instance.picture[0].file = picture.get('file');
-
-          }, 500);
-
-
+      Picture.create(file).then(
+        function(response){
+          def.resolve(response);
         });
 
-        mealModel.instance.title = data.title;
-        mealModel.instance.desc = data.desc;
+      return def.promise;
+    }
 
-      } else {
-        Meals.all().then(function(data){
+    /**
+     * Reset form data
+     */
+    function resetForm(){
+      meals.models.formly = {};
+      meals.models.picture = undefined;
+    }
+
+    /**
+     * Render meal collection
+     */
+    function render(){
+      Meals.all().then(
+        function(data){
           meals.collection = data;
           meals.items = data.instance;
         });
-      }
+
+      //if (data){
+      //  var mealModel = meals.collection.get(data.id);
+      //  var mealPicture = mealModel.get('picture');
+      //
+      //  if (!_.isUndefined(mealPicture)){
+      //    var picture = $stamplay.Cobject('pictures').Model;
+      //
+      //    picture.fetch(mealPicture[0].id).then(
+      //      function(){
+      //        console.log(picture);
+      //        $timeout(function(){
+      //          mealModel.instance.picture[0].file = picture.get('file');
+      //        }, 500);
+      //      });
+      //  }
+      //
+      //  mealModel.instance.title = data.title;
+      //  mealModel.instance.desc = data.desc;
+      //
+      //} else {
+      //  Meals.all().then(
+      //    function(data){
+      //      meals.collection = data;
+      //      meals.items = data.instance;
+      //    });
+      //}
     }
 
+    /**
+     * Update meal
+     * @param data
+     */
+    function update(data){
+
+      Meals.update(data.id, data).then(
+        function(){
+          toastr.success('Your meal '+ data.title +' has been updated.');
+          $timeout(function(){
+            render();
+          }, 500);
+        }, function(error){
+          toastr.error(error);
+        });
+    }
+
+    /**
+     * Destroy meal
+     * @param data
+     */
     function destroy(data){
 
       Meals.destroy(data.id).then(
         function(){
           toastr.success('Your meal '+ data.title +' has been deleted.');
-          update();
+          render();
 
         }, function(error){
           toastr.error(error);
         });
     }
 
+    /**
+     * Reset form picture model
+     */
     function resetPictureModel(){
-      meals.model.picture = undefined;
+      meals.models.picture = undefined;
     }
 
-    function edit(meal){
+    /**
+     * Open modal with meal data
+     * @param meal
+     */
+    function openModal(meal){
 
       $modal.open({
-        //animation: $scope.animationsEnabled,
-        templateUrl: 'app/components/admin/meals/editModal.html',
+        templateUrl: 'app/components/admin/meals/updateMealModal.html',
         controller: 'AdminMealsModalController',
-        controllerAs: 'editedMeal',
+        controllerAs: 'updateMealModal',
         bindToController: true,
-        //size: size,
         resolve: {
+          meals: function () {
+            return meals;
+          },
           meal: function () {
             return meal;
           }
@@ -139,29 +207,25 @@
       });
     }
 
-    $rootScope.$on('adminMeals.update', function(event, args){
-      update(args);
-    });
-
-    update();
+    render();
   }
 
+
+
   /** @ngInject */
-  function AdminMealsModalController($modalInstance, meal, Meals, $rootScope, Picture) {
+  function AdminMealsModalController($modalInstance, meal, meals, Picture) {
+    var updateMealModal = this;
 
-    var editedMeal = this;
-
-    editedMeal.models = {
+    updateMealModal.update = update;
+    updateMealModal.meal = meal;
+    updateMealModal.models = {
       formly: {
         title: meal.title,
         desc: meal.desc
       },
       picture: undefined
     };
-
-    editedMeal.originalPicture = meal.picture[0].file;
-
-    editedMeal.fields = [
+    updateMealModal.fields = [
       {
         key: 'title',
         type: 'input',
@@ -183,46 +247,64 @@
     ];
 
     /**
-     * save meal
+     * Update meal
      */
-    editedMeal.update = function(){
-      var data = [];
+    function update(){
+      var data = {};
 
       data.id = meal.id;
-      data.title = editedMeal.models.formly.title;
-      data.desc = editedMeal.models.formly.desc;
-      data.picture = {
-        //title: ,
-        id: meal.picture[0].id,
-        file: editedMeal.models.picture
-      };
+      data.title = updateMealModal.models.formly.title;
+      data.desc = updateMealModal.models.formly.desc;
 
-      if (_.isUndefined(data.picture.file)){
-        console.log('no update')
-        updateMeal(data);
+      /**
+       * Test if a picture has been added to the meal
+       */
+      if (_.isUndefined(updateMealModal.models.picture)) {
+        meals.update(data);
       } else {
-        Picture.update(data.picture).then(function(){
-          console.log('update')
+        /**
+         * Test if their was a picture attached to the meal
+         */
+        if (_.isUndefined(meal.picture)){
+          /**
+           * if meal.picture is undefined
+           * we create the picture and then update meal
+           */
+          meals.createPicture(updateMealModal.models.picture).then(
+            function(response){
+              data.picture = response.picture;
+              meals.update(data);
+            }
+          );
+        } else {
+          /**
+           * if meal.picture is defined
+           * we update the picture and then update meal
+           */
+          var picture = {
+            id: meal.picture[0].id,
+            file: updateMealModal.models.picture
+          };
 
-          updateMeal(data);
-        });
-      }
-    };
-
-    function updateMeal(data){
-      Meals.update(meal.id, data).then(
-        function(){
-          $modalInstance.close();
-          $rootScope.$broadcast('adminMeals.update', data);
-          toastr.success('Your meal has been updated successfully', 'Meal update');
+          Picture.update(picture).then(
+            function(){
+              meals.update(data);
+            }
+          );
         }
-      );
+      }
+      /**
+       * Close modal
+       */
+      $modalInstance.close();
     }
 
-    editedMeal.cancel = function() {
+    /**
+     * Cancel update
+     */
+    updateMealModal.cancel = function() {
       $modalInstance.dismiss('cancel');
     };
-
   }
 
 })();

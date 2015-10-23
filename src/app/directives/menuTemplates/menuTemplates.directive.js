@@ -3,28 +3,29 @@
 
   angular
     .module('carteetmenu')
-    .directive('embedCode', embedCode);
+    .directive('menuTemplates', menuTemplates);
 
   /** @ngInject */
-  function embedCode() {
+  function menuTemplates(MenuTemplates) {
     var directive = {
       restrict: 'E',
-      templateUrl: 'app/components/admin/embedCode/embedCode.html',
-      transclude: true,
+      templateUrl: 'app/directives/menuTemplates/menuTemplates.html',
       scope: {
-        template: '=template',
-        menuID: '=menuId'
+        selected: '=selected'
       },
-      //controller: EmbedCodeController,
-      //controllerAs: 'embedCode',
       link: function(scope, element, attrs){
-console.log(attrs.menuId);
 
-        scope.$watch(attrs.menuId, function(value){
-          console.log(value);
-          scope.html = '<iframe src="https://carteetmenu.stamplayapp.com/#/menu/'+ attrs.menuId +'" frameborder="0"></iframe>';
+        scope.templates = {};
 
-        });
+        MenuTemplates.all().then(
+          function(tpl){
+            scope.templates = tpl.instance;
+          }
+        );
+
+        scope.updateSelected = function(id){
+            scope.selected = id;
+        }
       }
     };
 

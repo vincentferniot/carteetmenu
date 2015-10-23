@@ -1,30 +1,39 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
             <a class="navbar-brand" ui-sref="home">
                 <img alt="Carte et Menu" src="../assets/images/logo.png" height="30">
             </a>
         </div>
-        <ul class="nav navbar-nav">
-            <li ng-show="!currentUser.id" ng-class="{ active: header.isActive('/')}"><a ui-sref="home">Home <span class="sr-only">(current)</span></a></li>
-            <li ng-show="!currentUser.id" ng-class="{ active: header.isActive('/authentication')}"><a ui-sref="authentication">Authenticate</a></li>
-            <li ng-show="currentUser.id" ng-class="{ active: header.isActive('/admin/menus')}"><a ui-sref="admin.menus">Menus</a></li>
-            <li ng-show="currentUser.id" ng-class="{ active: header.isActive('/admin/meals')}"><a ui-sref="admin.meals">Meals</a></li>
-        </ul>
-        <div class="nav navbar-nav navbar-right" ng-if="currentUser.id">
-            <div class="user-infos">
-                <!--<img ng-if="currentUser.profileImg" src="{{currentUser.profileImg}}" alt="{{currentUser.name}}" class="img-circle"/>-->
-                <span class="user-name">Welcome {{currentUser.name}}</span>
-                <div class="btn-group" dropdown is-open="status.isopen">
-                    <a id="single-button" dropdown-toggle ng-disabled="disabled">
-                        <img ng-if="!currentUser.profileImg" src="http://placebear.com/g/40/40" alt="{{currentUser.name}}" class="img-circle img-responsive pull-left"/>
-                    </a>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
-                        <li role="menuitem"><a ui-sref="admin.profile"><i class="glyphicon glyphicon-cog"></i> Edit your profile</a></li>
-                        <li role="menuitem"><a href="#" ng-click="header.logout()"><i class="glyphicon glyphicon-off"></i> Logout</a></li>
-                    </ul>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li ng-show="!currentUser.id" ng-class="{ active: header.isActive('/')}"><a ui-sref="home">Home <span class="sr-only">(current)</span></a></li>
+                <li ng-show="!currentUser.id" ng-class="{ active: header.isActive('/authentication')}"><a ui-sref="authentication">Authenticate</a></li>
+                <li ng-show="currentUser.id" ng-class="{ active: header.isActive('/admin/menus')}"><a ui-sref="admin.menus">Menus</a></li>
+                <li ng-show="currentUser.id" ng-class="{ active: header.isActive('/admin/meals')}"><a ui-sref="admin.meals">Meals</a></li>
+            </ul>
+            <div class="nav navbar-nav navbar-right" ng-if="currentUser.id">
+                <div class="user-infos">
+                    <!--<img ng-if="currentUser.profileImg" src="{{currentUser.profileImg}}" alt="{{currentUser.name}}" class="img-circle"/>-->
+                    <span class="user-name">Welcome {{currentUser.name}}</span>
+                    <div class="btn-group" dropdown is-open="status.isopen">
+                        <a id="single-button" dropdown-toggle ng-disabled="disabled">
+                            <img ng-if="!currentUser.profileImg" src="http://placebear.com/g/40/40" alt="{{currentUser.name}}" class="img-circle img-responsive pull-left"/>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+                            <li role="menuitem"><a ui-sref="admin.profile"><i class="glyphicon glyphicon-cog"></i> Edit your profile</a></li>
+                            <li role="menuitem"><a href="#" ng-click="header.logout()"><i class="glyphicon glyphicon-off"></i> Logout</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 </nav>

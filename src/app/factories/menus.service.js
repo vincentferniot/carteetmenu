@@ -165,6 +165,7 @@
 
           menu.set('title', data.title);
           menu.set('parts', data.parts);
+          menu.set('template', data.template);
 
           menu.save()
             .then(function() {

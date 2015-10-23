@@ -1,0 +1,12 @@
+<div class="panel panel-default">
+    <div class="panel-heading">Template models</div>
+    <div class="row">
+        <div class="col-sm-3" ng-repeat="tpl in templates">
+            <div class="template" ng-click="updateSelected(tpl.instance.id)">
+                <i ng-show="tpl.instance.id == selected" class="glyphicon glyphicon-check"></i>
+                <p class="title h4 text-center">{{tpl.instance.name}}</p>
+                <img src="{{tpl.instance.screenshot}}" class="img-responsive center-block" alt="{{tpl.instance.name}} template"/>
+            </div>
+        </div>
+    </div>
+</div>

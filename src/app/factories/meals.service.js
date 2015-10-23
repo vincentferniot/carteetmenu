@@ -81,32 +81,6 @@
       return def.promise;
     }
 
-    ///**
-    // * Create a picture
-    // */
-    //function createPicture(file) {
-    //  var def = $q.defer();
-    //
-    //  // create a new formdata
-    //  var fd = new FormData();
-    //  fd.append('file', file);
-    //
-    //  // process the upload
-    //  $http({
-    //    method: 'POST',
-    //    url: 'https://carteetmenu.stamplayapp.com/api/cobject/v1/pictures',
-    //    data: fd,
-    //    headers: { 'Content-Type': undefined },
-    //    file: file
-    //  }).then(
-    //    function(response) {
-    //      // push the given id into the pictureIDs array
-    //      def.resolve({ picture: response.data.id });
-    //    });
-    //
-    //  return def.promise;
-    //}
-
     /**
      * UPDATE a meal
      */
@@ -119,6 +93,10 @@
 
           meal.set('title', data.title);
           meal.set('desc', data.desc);
+
+          if (data.picture){
+            meal.set('picture', data.picture);
+          }
 
           meal.save()
             .then(function() {
