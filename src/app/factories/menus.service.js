@@ -6,7 +6,7 @@
     .factory('Menus', MenusService);
 
   /**@ngInject**/
-  function MenusService($stamplay, $q, User) {
+  function MenusService($stamplay, $q, User, $rootScope) {
 
     // return an object with all our functions
     return {
@@ -26,15 +26,17 @@
       var def = $q.defer();
       var menuCollection = $stamplay.Cobject('menu').Collection;
 
-
       User.getCurrent().then(
         function(user){
-          menuCollection.equalTo('owner', user.get('_id')).fetch()
-            .then(function(){
-              def.resolve(menuCollection);
-            }, function(){
-              def.reject({'error': 'Unable to retrieve meals data.'});
-            });
+          menuCollection
+            .equalTo('owner', user.get('id'))
+            .fetch()
+            .then(
+              function(){
+                def.resolve(menuCollection);
+              }, function(){
+                def.reject({'error': 'Unable to retrieve menus data.'});
+              });
         });
 
       return def.promise;
@@ -45,13 +47,14 @@
       var def = $q.defer();
       var menu = $stamplay.Cobject('menu').Model;
 
-      menu.fetch(id).then(
-        function(){
-          def.resolve(menu);
-        },
-        function(){
-          def.reject({'error': 'Unable to retrieve menu data.'});
-        }
+      menu
+        .fetch(id)
+        .then(
+          function(){
+            def.resolve(menu);
+          }, function(){
+            def.reject({'error': 'Unable to retrieve menu data.'});
+          }
       );
 
       return def.promise;
@@ -62,13 +65,14 @@
       var def = $q.defer();
       var template = $stamplay.Cobject('template').Model;
 
-      template.fetch(templateID).then(
-        function(){
-          def.resolve(template);
-        },
-        function(){
-          def.reject({'error': 'Unable to retrieve template data.'});
-        }
+      template
+        .fetch(templateID)
+        .then(
+          function(){
+            def.resolve(template);
+          }, function(){
+            def.reject({'error': 'Unable to retrieve template data.'});
+          }
       );
 
       return def.promise;

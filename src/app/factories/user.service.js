@@ -6,7 +6,7 @@
     .factory('User', UserService);
 
   /**@ngInject**/
-  function UserService($stamplay, $q) {
+  function UserService($stamplay, $q, $http) {
 
     // return an object with all our functions
     return {
@@ -24,13 +24,13 @@
      */
     function getCurrent() {
       var def = $q.defer();
-
-      // instantiate a new user model from the stamplay js sdk
       var user = $stamplay.User().Model;
-      user.currentUser()
-        .then(function () {
-          // send the entire user model back
+
+      user.currentUser().then(
+        function () {
           def.resolve(user);
+        }, function(){
+          def.reject({error: 'Unable to retrieve current user.'})
         });
 
       return def.promise;
@@ -41,8 +41,6 @@
      */
     function signup(data) {
       var def = $q.defer();
-
-      // instantiate a new user model from the stamplay js sdk
       var user = $stamplay.User().Model;
       user.signup(data)
         .then(function () {
@@ -60,8 +58,8 @@
       var def = $q.defer();
       var user = $stamplay.User().Model;
 
-      user.login(data.email, data.password)
-        .then(function () {
+      user.login(data.email, data.password).then(
+        function() {
           // send the entire user model back
           def.resolve(user);
         }, function () {

@@ -1,5 +1,6 @@
 (function() {
   'use strict';
+  //[{"title":"Entrées","id":["561626cbf9c21300285c44df","56154d9af9c21300285c426a"]},{"title":"Plats","id":["560d8bcdfe5c006e29d407f9","56162832f9c21300285c44e1","560e5a4bfe5c006e29d409ae"]}]
 
   angular
     .module('app.admin.menu', [])
@@ -9,16 +10,16 @@
   function AdminMenuController(Meals, Menus, $stateParams) {
     var menu = this;
 
-    menu.mealCollection = [];
     menu.availableMeals = [];
-    menu.insertedMeals = [];
-    menu.title = '';
-    menu.id = '';
-    menu.templateID = '';
     menu.embedCode = '';
+    menu.id = '';
+    menu.insertedMeals = [];
+    menu.mealCollection = [];
     menu.parts = {};
     menu.parts.data = [];
     menu.parts.model = [];
+    menu.templateID = '';
+    menu.title = '';
 
     menu.update = update;
     menu.addPart = addPart;
@@ -29,28 +30,31 @@
       function(mealCollection){
         angular.copy(mealCollection, menu.mealCollection);
 
-        Menus.getMenuById($stateParams.id).then(
-          function(menuModel){
-            menu.title = menuModel.get('title');
-            menu.id = menuModel.get('id');
-            menu.parts.data = menuModel.get('parts');
-            menu.displayMeals(mealCollection);
-            menu.embedCode = '<iframe ' +
-              'src="https://carteetmenu.stamplayapp.com/#/menu/'+ menu.id +'" ' +
-              'frameborder="0" ' +
-              'height="800" ' +
-              'width="600" ' +
-              'name="'+ menu.title +'"></iframe>';
+        Menus
+          .getMenuById($stateParams.id)
+          .then(
+            function(menuModel){
+              menu.title = menuModel.get('title');
+              menu.id = menuModel.get('id');
+              menu.parts.data = menuModel.get('parts');
+              menu.embedCode = '<iframe ' +
+                'src="https://carteetmenu.stamplayapp.com/#/menu/'+ menu.id +'" ' +
+                'frameborder="0" ' +
+                'height="800" ' +
+                'width="600" ' +
+                'name="'+ menu.title +'"></iframe>';
 
-            menu.templateID = menuModel.get('template')[0];
-            //Menus.getMenuTemplate(menuModel.get('template')).then(
-            //  function(template){
-            //    menu.template = template.instance;
-            //  }
-            //);
-          });
+              menu.templateID = menuModel.get('template')[0];
+
+              menu.displayMeals(mealCollection);
+
+              //Menus.getMenuTemplate(menuModel.get('template')).then(
+              //  function(template){
+              //    menu.template = template.instance;
+              //  }
+              //);
+            });
     });
-    //[{"title":"Entrées","id":["561626cbf9c21300285c44df","56154d9af9c21300285c426a"]},{"title":"Plats","id":["560d8bcdfe5c006e29d407f9","56162832f9c21300285c44e1","560e5a4bfe5c006e29d409ae"]}]
 
     /** ui-sortable options **/
     menu.sortableOptions = {
@@ -89,7 +93,9 @@
         var title = !_.isEmpty(part.title) ? part.title : '';
         var meals = [];
 
-        if (_.isArray(part.mealsID) && !_.isUndefined(part.mealsID) && !_.isEmpty(part.mealsID)){
+        if (_.isArray(part.mealsID) &&
+          !_.isUndefined(part.mealsID) &&
+          !_.isEmpty(part.mealsID)){
 
           angular.forEach(part.mealsID, function(id){
 
@@ -109,6 +115,8 @@
           //);
 
           mealCollection.remove(part.mealsID);
+
+          console.log(menu.mealCollection);
         }
 
         menu.parts.model.splice(count, 1, {
@@ -152,8 +160,8 @@
 
       menu.parts.model.splice(index, 1);
       delete menu.parts.data[keys[index]];
-      //angular.copy(menu.mealCollection, mealCollection);
-      //console.log(menu.mealCollection);
+
+      console.log(menu.mealCollection);
       console.log(mealCollection);
       menu.displayMeals(mealCollection);
     }

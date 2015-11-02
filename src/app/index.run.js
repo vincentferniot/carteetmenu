@@ -8,13 +8,13 @@
     .run(runBlock);
 
   /** @ngInject */
-  function runBlock($log, $rootScope, User) {
+  function runBlock($log, $rootScope, User, $state) {
 
     $log.debug('runBlock end');
     $rootScope.currentUser = {};
 
-    User.getCurrent()
-      .then(function(data) {
+    User.getCurrent().then(
+      function(data) {
         if (data.get('_id')) {
           $rootScope.currentUser.id    = data.get('_id');
           $rootScope.currentUser.name  = data.get('displayName');
@@ -33,11 +33,14 @@
           //  window.location.pathname = '';
           //}
 
+          $state.go('authentication');
 
           //if(stateCurrentName.indexOf('menu') !== 0){
           //  $state.go('home');
           //}
         }
+      }, function(){
+        $state.go('authentication');
       });
   }
 })();

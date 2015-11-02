@@ -8,7 +8,6 @@
   /**@ngInject**/
   function MealsService($stamplay, $q, User) {
 
-    // return an object with all our functions
     return {
       all: all,
       create: create,
@@ -26,15 +25,19 @@
 
       User.getCurrent().then(
         function(user){
-          mealCollection.populate().equalTo('owner', user.get('_id')).fetch().then(
-            function(){
-              def.resolve(mealCollection);
-            }, function(){
-              def.reject({'error': 'Unable to retrieve meals data.'});
-            });
+          mealCollection
+            .populate()
+            .equalTo('owner', user.get('_id'))
+            .fetch()
+            .then(function(){
+                def.resolve(mealCollection);
+              }, function(){
+                def.reject({'error': 'Unable to retrieve meals data.'});
+              });
 
+        }, function(response){
+          toastr.error(response.error);
         });
-
 
       return def.promise;
     }
@@ -46,12 +49,14 @@
       var def = $q.defer();
       var mealModel = $stamplay.Cobject('meal').Model;
 
-      mealModel.fetch(id).then(
-        function(){
-          def.resolve(mealModel);
-        }, function(){
-          def.reject({'error': 'Unable to retrieve meals data.'});
-        });
+      mealModel
+        .fetch(id)
+        .then(
+          function(){
+            def.resolve(mealModel);
+          }, function(){
+            def.reject({'error': 'Unable to retrieve meals data.'});
+          });
 
       return def.promise;
     }
@@ -61,22 +66,21 @@
      */
     function create(data) {
       var def = $q.defer();
-
-      // instantiate a new product model from the stamplay js sdk
       var mealModel = $stamplay.Cobject('meal').Model;
 
-      // loop over the fields in data and update the product
       angular.forEach(data, function(value, key) {
         mealModel.set(key, value);
       });
 
       // save the object
-      mealModel.save()
-        .then(function() {
-          def.resolve(mealModel);
-        }, function(){
-          def.reject({'error': 'Unable to create meal.'});
-        });
+      mealModel
+        .save()
+        .then(
+          function() {
+            def.resolve(mealModel);
+          }, function(){
+            def.reject({'error': 'Unable to create meal.'});
+          });
 
       return def.promise;
     }
@@ -98,12 +102,14 @@
             meal.set('picture', data.picture);
           }
 
-          meal.save()
-            .then(function() {
-              def.resolve(meal);
-            }, function(){
-              def.reject({'error': 'Unable to update your meal.'});
-            });
+          meal
+            .save()
+            .then(
+              function() {
+                def.resolve(meal);
+              }, function(){
+                def.reject({'error': 'Unable to update your meal.'});
+              });
         }
       );
 
@@ -115,14 +121,14 @@
      */
     function destroy(id) {
       var def = $q.defer();
-
-      // instanticate a new product model from the stamplay js sdk
       var mealModel = $stamplay.Cobject('meal').Model;
 
-      mealModel.fetch(id)
-        .then(function() {
-          return mealModel.destroy();
-        })
+      mealModel
+        .fetch(id)
+        .then(
+          function() {
+            return mealModel.destroy();
+          })
         .then(function() {
           // return true that the product was deleted
           def.resolve({ 'success': true });

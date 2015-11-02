@@ -27,9 +27,12 @@
     ];
 
     function update(){
-      Menus.all().then(function(menuCollection){
-        menus.items = menuCollection.instance;
-      });
+      Menus.all().then(
+        function(menuCollection){
+          menus.items = menuCollection.instance;
+        }, function(response){
+          toastr.error(response.error);
+        });
     }
 
     function create(){

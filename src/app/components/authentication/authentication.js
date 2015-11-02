@@ -91,8 +91,10 @@
 
       User.signup(signupData)
         .then(function(data) {
+          var userID = data.get('_id');
+
           if (data.get('_id')) {
-            $rootScope.currentUser.id    = data.get('_id');
+            $rootScope.currentUser.id    = userID;
             $rootScope.currentUser.name  = data.get('displayName');
             $rootScope.currentUser.image = data.get('profileImg');
 
@@ -112,16 +114,18 @@
         password: authentication.login.model.password
       };
 
+      User.login(loginData).then(
+        function(user) {
+          var userID = user.get('id');
 
-      User.login(loginData)
-        .then(function(data) {
-          if (data.get('_id')) {
-            $rootScope.currentUser.id    = data.get('_id');
-            $rootScope.currentUser.name  = data.get('displayName');
-            $rootScope.currentUser.image = data.get('profileImg');
+          if (userID) {
+            $rootScope.currentUser.id    = userID;
+            $rootScope.currentUser.name  = user.get('displayName');
+            $rootScope.currentUser.image = user.get('profileImg');
 
             // redirect the user
             $state.go('admin.menus');
+
           }
         }, function(data){
           toastr.error(data.error + '<br> Check your email and/or your password');
