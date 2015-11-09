@@ -1,6 +1,5 @@
 (function() {
   'use strict';
-  //[{"title":"Entrées","id":["561626cbf9c21300285c44df","56154d9af9c21300285c426a"]},{"title":"Plats","id":["560d8bcdfe5c006e29d407f9","56162832f9c21300285c44e1","560e5a4bfe5c006e29d409ae"]}]
 
   angular
     .module('app.admin.menu', [])
@@ -10,10 +9,9 @@
   function AdminMenuController(Meals, Menus, $stateParams) {
     var menu = this;
 
-    menu.availableMeals = [];
+    menu.meals = [];
     menu.embedCode = '';
     menu.id = '';
-    menu.insertedMeals = [];
     menu.mealCollection = [];
     menu.parts = {};
     menu.parts.data = [];
@@ -24,7 +22,7 @@
     menu.update = update;
     menu.addPart = addPart;
     menu.deletePart = deletePart;
-    menu.displayMeals = displayMeals;
+    menu.populate = populate;
 
     Meals.all().then(
       function(mealCollection){
@@ -45,14 +43,10 @@
                 'name="'+ menu.title +'"></iframe>';
 
               menu.templateID = menuModel.get('template')[0];
+              menu.meals = mealCollection;
 
-              menu.displayMeals(mealCollection);
+              menu.populate();
 
-              //Menus.getMenuTemplate(menuModel.get('template')).then(
-              //  function(template){
-              //    menu.template = template.instance;
-              //  }
-              //);
             });
     });
 
@@ -61,17 +55,9 @@
       placeholder: 'meals',
       connectWith: '.sortable',
       cursor: 'move',
-      opacity: 0.5,
-      stop: function(e, ui){
-        //console.log(ui.item.sortable);
-        //console.log(ui.item.sortable.model.instance.id);
-        //console.log(ui.item.sortable.source);
-        //console.log(ui.item.sortable.sourceModel);
-        //console.log(ui.item);
-
-        addMealToPart();
-      }
+      opacity: 0.5
     };
+
     /** ui-sortable meal container options **/
     menu.sortableContainerOptions = {
       placeholder: 'menu-container',
@@ -81,16 +67,10 @@
     };
 
     /**
-     * Display meals
-     * @param mealCollection
+     * Populate view with meals
      */
-    function displayMeals(mealCollection){
-      var count = 0;
-      console.log(mealCollection);
-
+    function populate(){
       angular.forEach(menu.parts.data, function(part){
-
-        var title = !_.isEmpty(part.title) ? part.title : '';
         var meals = [];
 
         if (_.isArray(part.mealsID) &&
@@ -98,36 +78,34 @@
           !_.isEmpty(part.mealsID)){
 
           angular.forEach(part.mealsID, function(id){
-
-            if(mealCollection.get(id)){
-              meals.push(mealCollection.get(id));
-            }
+            meals.push(menu.mealCollection.get(id));
           });
 
-          //Menus.getMeals({'menuId': $stateParams.id, 'mealsId': meal.id}).then(
-          //  function(data){
-          //    meals = data;
-          //    menu.part.splice(count, 0, {
-          //      title: title,
-          //      meals: meals
-          //    });
-          //  }
-          //);
-
-          mealCollection.remove(part.mealsID);
-
-          console.log(menu.mealCollection);
+          menu.mealCollection.remove(part.mealsID);
         }
 
-        menu.parts.model.splice(count, 1, {
-          title: title,
-          meals: meals
+        menu.meals = getFormattedMeals(menu.mealCollection.instance);
+
+        menu.parts.model.push({
+          title: !_.isEmpty(part.title) ? part.title : '',
+          meals: getFormattedMeals(meals)
         });
-
-        count++;
       });
+    }
 
-      menu.availableMeals = mealCollection.instance;
+    /**
+     * Format meals data
+     * @param meals
+     * @returns {Array|*|{annotation}}
+     */
+    function getFormattedMeals(meals){
+      return meals.map(function(meal) {
+        return {
+          id: meal.get('id'),
+          title: meal.get('title'),
+          picture: meal.get('picture')[0].file
+        };
+      })
     }
 
     /**
@@ -156,42 +134,31 @@
      */
     function deletePart(index){
       var keys = _.keys(menu.parts.data);
-      var mealCollection = angular.copy(menu.mealCollection);
+      var part = menu.parts.model.splice(index, 1);
 
-      menu.parts.model.splice(index, 1);
+      angular.forEach(part[0].meals, function(meal){
+        menu.meals.push(meal);
+      });
+
       delete menu.parts.data[keys[index]];
-
-      console.log(menu.mealCollection);
-      console.log(mealCollection);
-      menu.displayMeals(mealCollection);
     }
 
     /**
      * save menu
      */
     function update(){
-      var parts = {};
-      var data = [];
-      var count = 0;
-
-      angular.forEach(menu.parts.model, function(part){
-        var mealsID = [];
-
-        angular.forEach(part.meals, function(meal){
-          mealsID.push(meal.get('id'));
-        });
-
-        parts[count] = {
-          title: part.title,
-          mealsID: mealsID
-        };
-
-        count++;
-      });
-
-      data.parts = parts;
-      data.title = menu.title;
-      data.template = menu.templateID;
+      var data = {
+        parts: menu.parts.model.map(function(part){
+          return {
+            title: part.title,
+            mealsID: part.meals.map(function(meal){
+              return meal.id
+            })
+          }
+        }),
+        title: menu.title,
+        template: menu.templateID
+      };
 
       Menus.update($stateParams.id, data).then(
         function(){
@@ -199,40 +166,5 @@
         }
       );
     }
-
-    function addMealToPart(){
-      var count = 0;
-      angular.forEach(menu.parts.model, function(part){
-        //var mealsID = [];
-        console.log(menu.parts.data);
-
-        angular.forEach(part.meals, function(meal){
-          menu.parts.data[count].mealsID.push(meal.get('id'));
-        });
-
-
-        //parts[count] = {
-        //  title: part.title,
-        //  mealsID: mealsID
-        //};
-
-        count++;
-      });
-    }
-
-    //$scope.draggableOptions = {
-    //  connectWith: ".connected-drop-target-sortable",
-    //  stop: function (e, ui) {
-    //    // if the element is removed from the first container
-    //    if (ui.item.sortable.source.hasClass('draggable-element-container') &&
-    //      ui.item.sortable.droptarget &&
-    //      ui.item.sortable.droptarget != ui.item.sortable.source &&
-    //      ui.item.sortable.droptarget.hasClass('connected-drop-target-sortable')) {
-    //      // restore the removed item
-    //      ui.item.sortable.sourceModel.push(ui.item.sortable.model);
-    //    }
-    //  }
-    //};
-
   }
 })();

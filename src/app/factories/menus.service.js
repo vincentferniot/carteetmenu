@@ -160,16 +160,9 @@
       menu.fetch(id).then(
         function(){
 
-
-          //angular.forEach(data, function(value, key) {
-          //  console.log('yo');
-          //  console.log(key +' : '+ value);
-          //  menu.set(key, value);
-          //});
-
-          menu.set('title', data.title);
-          menu.set('parts', data.parts);
-          menu.set('template', data.template);
+          angular.forEach(data, function(value, key) {
+            menu.set(key, value);
+          });
 
           menu.save()
             .then(function() {
